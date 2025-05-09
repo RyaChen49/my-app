@@ -1,18 +1,32 @@
 'use client'
-import { useState } from "react"; 
-import Image from "next/image";
+import { useState,useEffect } from "react"; 
+import Link from "next/link";
 import TaskList from "@/conpoents/MainMenu";
 
 export default function Home() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
+  const [nextId, setNextId] = useState(1);
+  useEffect(() => {
+    const savedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    setTasks(savedTasks);
+    const maxId=savedTasks.reduce((max, task) => Math.max(max, task.id), 0);
+    setNextId(maxId + 1);
+  }, []);
   const addTask = () => {
     console.log("Before", tasks);
     console.log("New Task", newTask);
-    const updateTask = [...tasks, newTask];
+    const newTaskObj = {
+      id: nextId,
+      title: newTask,
+      description: "",
+    };
+    const updateTask = [...tasks, newTaskObj];
     setTasks(updateTask);
     console.log("After", updateTask);
     setNewTask("");
+    setNextId(nextId + 1);
+    localStorage.setItem("tasks", JSON.stringify(newTask));
     };
   const handleDelete = (index) => {
     const newTask = tasks.filter((_, i) => i !== index);
