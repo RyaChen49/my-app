@@ -26,11 +26,12 @@ export default function Home() {
     console.log("After", updateTask);
     setNewTask("");
     setNextId(nextId + 1);
-    localStorage.setItem("tasks", JSON.stringify(newTask));
+    localStorage.setItem("tasks", JSON.stringify(updateTask));
     };
-  const handleDelete = (index) => {
-    const newTask = tasks.filter((_, i) => i !== index);
-    setTasks(newTask);
+  const handleDelete = (id) => {
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
+    localStorage.setItem("tasks", JSON.stringify(newTasks));
   };
   return (
     // main 容器，使用 Tailwind CSS 添加內邊距
